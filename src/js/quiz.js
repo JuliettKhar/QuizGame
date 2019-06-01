@@ -1,5 +1,12 @@
 let correctAnswer;
+let checkAnswer;
+let questions;
 
+function findElements() {
+	checkAnswer = document.querySelector('#check-answer');
+	console.log(checkAnswer)
+	questions = document.querySelector('.questions');
+}
 
 function onLoad() {
 	loadQuestions();
@@ -23,14 +30,13 @@ function displayQuestion(data) {
 		possibleAnswers.splice(Math.floor(Math.random() * 3), 0, correctAnswer);
 		questionHtml.innerHTML = `
                <div class="row justify-content-between heading">
-                    <p class="category">Category:  ${question.category}</p>
+                    <p class="category">Category: ${question.category}</p>
                     <div class="totals">
                          <span class="badge badge-success"></span>
                          <span class="badge badge-danger"></span>
                     </div>
                </div>
                <h2 class="text-center">${question.question}
-
           `;
 
 				const answerDiv = document.createElement('div');
@@ -40,20 +46,41 @@ function displayQuestion(data) {
 						answerHtml.classList.add('col-12', 'col-md-5');
 						answerHtml.textContent = answer;
 						answerDiv.appendChild(answerHtml);
-
+						selectAnswer();
 				});
 				questionHtml.appendChild(answerDiv);
 				document.querySelector('#app').appendChild(questionHtml);
-	})
+	});
+}
+
+	function selectAnswer(event) {
+	const { target } = event;
+ 	if(document.querySelector('.active')) {
+					const activeAnswer = document.querySelector('.active');
+	 	activeAnswer.classList.remove('.active');
+}
+	target.classList.add('active');
+}
+
+function validateAnswer() {
+	if(document.querySelector('.questions .active')) {
+		console.log(1)
+	}
+	else {
+		console.log(2)
+	}
 }
 
 function subscribe() {
 	document.addEventListener('DOMContentLoaded', onLoad);
+	checkAnswer.addEventListener('click', validateAnswer);
+	questions.addEventListener('click', selectAnswer);
 }
 
 
 
 
 export function init() {
+	findElements();
 	subscribe();
 }
