@@ -24,15 +24,12 @@ function loadQuestions() {
 }
 
 	function selectAnswer(event) {
-		console.log(event.target, 'selectAnswer')
-	// const { target } = event;
-	
+	const { target } = event;
  	if(questionsDiv.querySelector('.active')) {
-					const activeAnswer = questionsDiv.querySelector('.active');
-					console.log(activeAnswer, 'selectAnswer activeAnswer')
+			const activeAnswer = questionsDiv.querySelector('.active');
 	 	activeAnswer.classList.remove('.active');
 	}
-	event.target.classList.add('active');
+	target.classList.add('active');
 }
 
 function displayQuestion(data) {
@@ -53,7 +50,6 @@ function displayQuestion(data) {
                </div>
                <h2 class="text-center">${question.question}
           `;
-
 				const answerDiv = document.createElement('div');
 				answerDiv.classList.add('questions', 'row', 'justify-content-around', 'mt-4');
 
@@ -62,8 +58,6 @@ function displayQuestion(data) {
 						answerHtml.classList.add('col-12', 'col-md-5');
 						answerHtml.textContent = answer;
 						answerDiv.appendChild(answerHtml);
-
-						
 				});
 				questionHtml.appendChild(answerDiv);
 				document.querySelector('#app').appendChild(questionHtml);
@@ -90,8 +84,7 @@ function saveIntoStorage() {
 
 function checkAnswers() {
 	const userAnswer = document.querySelector('.questions .active');
-	console.log(userAnswer.textContent,'checkAnswers')
-	
+
 	if(userAnswer.textContent === correctAnswer) {
 		correctNumber++;
 	}
@@ -105,7 +98,6 @@ function checkAnswers() {
 
 function validateAnswer() {
 	if(document.querySelector('.questions .active')) {
-		// console.log(document.querySelector('.questions .active'))
 		checkAnswers();
 	}
 	else {
@@ -115,7 +107,6 @@ function validateAnswer() {
 		const questions = document.querySelector('.questions');
 		questions.appendChild(errorDiv);
 		deleteErrorMessage();
-
 	}
 }
 
@@ -145,5 +136,4 @@ function subscribe() {
 export function init() {
 	findElements();
 	subscribe();
-	// selectAnswer(event);
 }
