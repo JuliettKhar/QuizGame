@@ -17,7 +17,7 @@ function loadQuestions() {
 	fetch(url)
 		.then( data => data.json())
 		.then( result => displayQuestion(result.results))
-		.then( err => console.log(err))
+		.catch( err => console.log(err))
 }
 
 function displayQuestion(data) {
