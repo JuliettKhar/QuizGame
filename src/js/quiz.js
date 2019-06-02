@@ -4,8 +4,7 @@ let questions;
 
 function findElements() {
 	checkAnswer = document.querySelector('#check-answer');
-	console.log(checkAnswer)
-	questions = document.querySelector('.questions');
+	questions = document.querySelector('.row');
 }
 
 function onLoad() {
@@ -18,6 +17,16 @@ function loadQuestions() {
 		.then( data => data.json())
 		.then( result => displayQuestion(result.results))
 		.catch( err => console.log(err))
+}
+
+	function selectAnswer(event) {
+		console.log(event.target, 'selectAnswer')
+	// const { target } = event;
+	event.target.classList.add('active');
+ 	if(event.target.classList.contains('.active')) {
+					const activeAnswer = document.querySelector('.active');
+	 	activeAnswer.classList.remove('.active');
+	}
 }
 
 function displayQuestion(data) {
@@ -46,21 +55,14 @@ function displayQuestion(data) {
 						answerHtml.classList.add('col-12', 'col-md-5');
 						answerHtml.textContent = answer;
 						answerDiv.appendChild(answerHtml);
-						selectAnswer();
+						
 				});
 				questionHtml.appendChild(answerDiv);
 				document.querySelector('#app').appendChild(questionHtml);
 	});
 }
 
-	function selectAnswer(event) {
-	const { target } = event;
- 	if(document.querySelector('.active')) {
-					const activeAnswer = document.querySelector('.active');
-	 	activeAnswer.classList.remove('.active');
-}
-	target.classList.add('active');
-}
+
 
 function validateAnswer() {
 	if(document.querySelector('.questions .active')) {
@@ -83,4 +85,5 @@ function subscribe() {
 export function init() {
 	findElements();
 	subscribe();
+	// selectAnswer(event);
 }
