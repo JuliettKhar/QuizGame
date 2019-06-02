@@ -22,11 +22,13 @@ function loadQuestions() {
 	function selectAnswer(event) {
 		console.log(event.target, 'selectAnswer')
 	// const { target } = event;
-	event.target.classList.add('active');
- 	if(event.target.classList.contains('.active')) {
+	
+ 	if(document.querySelector('.active')) {
 					const activeAnswer = document.querySelector('.active');
+					console.log(activeAnswer, 'selectAnswer activeAnswer')
 	 	activeAnswer.classList.remove('.active');
 	}
+	event.target.classList.add('active');
 }
 
 function displayQuestion(data) {
@@ -62,14 +64,24 @@ function displayQuestion(data) {
 	});
 }
 
-
+function deleteErrorMessage() {
+	setTimeout( () => {
+		document.querySelector('.alert-danger').remove();
+	}, 3000);
+}
 
 function validateAnswer() {
 	if(document.querySelector('.questions .active')) {
 		console.log(1)
 	}
 	else {
-		console.log(2)
+		const errorDiv = document.createElement('div');
+		errorDiv.classList.add('alert', 'alert-danger', 'col-md-6', 'justify-content-between');
+		errorDiv.textContent = 'Please, select 1 answer';
+		const questions = document.querySelector('.questions');
+		questions.appendChild(errorDiv);
+		deleteErrorMessage();
+
 	}
 }
 
