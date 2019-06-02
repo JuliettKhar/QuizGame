@@ -1,10 +1,14 @@
 let correctAnswer;
 let checkAnswer;
-let questions;
+let questionsDiv;
+let clearBtn;
+let correctNumber = (localStorage.getItem('quiz_game_correct') ? localStorage.getItem('quiz_game_correct') : 0);
+let incorrectNumber = (localStorage.getItem('quiz_game_incorrect') ? localStorage.getItem('quiz_game_incorrect') : 0);
 
 function findElements() {
 	checkAnswer = document.querySelector('#check-answer');
-	questions = document.querySelector('.row');
+	questionsDiv = document.querySelector('.row');
+	clearBtn = document.querySelector('#clear-storage');
 }
 
 function onLoad() {
@@ -23,8 +27,8 @@ function loadQuestions() {
 		console.log(event.target, 'selectAnswer')
 	// const { target } = event;
 	
- 	if(document.querySelector('.active')) {
-					const activeAnswer = document.querySelector('.active');
+ 	if(questionsDiv.querySelector('.active')) {
+					const activeAnswer = questionsDiv.querySelector('.active');
 					console.log(activeAnswer, 'selectAnswer activeAnswer')
 	 	activeAnswer.classList.remove('.active');
 	}
@@ -43,8 +47,8 @@ function displayQuestion(data) {
                <div class="row justify-content-between heading">
                     <p class="category">Category: ${question.category}</p>
                     <div class="totals">
-                         <span class="badge badge-success"></span>
-                         <span class="badge badge-danger"></span>
+                         <span class="badge badge-success">${correctNumber}</span>
+                         <span class="badge badge-danger">${incorrectNumber}</span>
                     </div>
                </div>
                <h2 class="text-center">${question.question}
@@ -52,11 +56,13 @@ function displayQuestion(data) {
 
 				const answerDiv = document.createElement('div');
 				answerDiv.classList.add('questions', 'row', 'justify-content-around', 'mt-4');
+
 				possibleAnswers.forEach( answer => {
 						const answerHtml = document.createElement('li');
 						answerHtml.classList.add('col-12', 'col-md-5');
 						answerHtml.textContent = answer;
 						answerDiv.appendChild(answerHtml);
+
 						
 				});
 				questionHtml.appendChild(answerDiv);
@@ -70,9 +76,37 @@ function deleteErrorMessage() {
 	}, 3000);
 }
 
+function removePreviousQuestion() {
+	const app = document.querySelector('#app');
+	while(app.firstChild) {
+		app.removeChild(app.firstChild);
+	}
+}
+
+function saveIntoStorage() {
+	localStorage.setItem('quiz_game_correct', correctNumber);
+	localStorage.setItem('quiz_game_incorrect', incorrectNumber);
+}
+
+function checkAnswers() {
+	const userAnswer = document.querySelector('.questions .active');
+	console.log(userAnswer.textContent,'checkAnswers')
+	
+	if(userAnswer.textContent === correctAnswer) {
+		correctNumber++;
+	}
+	else {
+		incorrectNumber++;
+	}
+	removePreviousQuestion();
+	saveIntoStorage();
+	loadQuestions();
+}
+
 function validateAnswer() {
 	if(document.querySelector('.questions .active')) {
-		console.log(1)
+		// console.log(document.querySelector('.questions .active'))
+		checkAnswers();
 	}
 	else {
 		const errorDiv = document.createElement('div');
@@ -85,10 +119,24 @@ function validateAnswer() {
 	}
 }
 
+function reloadPage() {
+	setTimeout( () => {
+			window.location.reload();
+		}, 0);
+}
+
+function clearResults(event) {
+	localStorage.setItem('quiz_game_correct', 0);
+	localStorage.setItem('quiz_game_incorrect', 0);
+	reloadPage();
+	event.preventDefault();
+}
+
 function subscribe() {
 	document.addEventListener('DOMContentLoaded', onLoad);
 	checkAnswer.addEventListener('click', validateAnswer);
-	questions.addEventListener('click', selectAnswer);
+	questionsDiv.addEventListener('click', selectAnswer);
+	clearBtn.addEventListener('click', clearResults);
 }
 
 
